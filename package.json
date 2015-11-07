@@ -19,7 +19,6 @@
     "url": "http://github.com/slackhq/node-slack-client/issues"
   },
   "dependencies": {
-    "bluebird": "^2.10.1",
     "coffee-script": "~1.9.3",
     "debug": "^2.2.0",
     "eventemitter2": "^0.4.14",

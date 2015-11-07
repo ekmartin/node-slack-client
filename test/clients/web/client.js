@@ -52,36 +52,18 @@ describe('Web API Client', function() {
     expect(client).to.have.property('auth');
   });
 
-  describe('supports different interfaces for returning API responses', function() {
-    it('should use promises when usePromises is true', function(done) {
-      var args = {
-        headers: {},
-        statusCode: 200,
-        body: 'test'
-      };
+  it('should make API calls via the transport function', function(done) {
+    var args = {
+      headers: {},
+      statusCode: 200,
+      body: 'test'
+    };
 
-      var client = new WebAPIClient('test-token', mockTransport, {usePromises: true, middleware: []});
+    var client = new WebAPIClient('test-token', mockTransport, {middleware: []});
 
-      client.makeAPICall('test', args, null)
-        .then(function(res) {
-          expect(res).to.equal('test');
-          done();
-        });
-    });
-
-    it('should use callbacks when usePromises is false', function(done) {
-      var args = {
-        headers: {},
-        statusCode: 200,
-        body: 'test'
-      };
-
-      var client = new WebAPIClient('test-token', mockTransport, {middleware: []});
-
-      client.makeAPICall('test', args, function(err, res) {
-        expect(res).to.equal('test');
-        done();
-      });
+    client.makeAPICall('test', args, function(err, res) {
+      expect(res).to.equal('test');
+      done();
     });
   });
 
