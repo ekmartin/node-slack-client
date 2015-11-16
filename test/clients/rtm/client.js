@@ -75,21 +75,4 @@ describe('RTM API Client', function() {
 
   it('should not attempt to reconnect while a reconnection is in progress');
 
-  it('should process a raw message object, converting it to JSON with camelcased keys', function() {
-    var rtm = new RtmAPIClient(null, null, null, {});
-    var testMsg = {
-      "ok": true,
-      "reply_to": 1,
-      "ts": "1355517523.000005",
-      "text": "Hello world"
-    };
-    var message = rtm._processMessage(JSON.stringify(testMsg));
-    expect(message).to.deep.equal({
-      ok: true,
-      replyTo: 1,
-      ts: "1355517523.000005",
-      text: "Hello world"
-    });
-  });
-
 });
