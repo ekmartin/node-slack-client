@@ -1,0 +1,12 @@
+{
+  "im_close": {
+    "type": "im_close",
+    "user": "USLACKBOT",
+    "channel": "D0CJ1P4JJ"
+  },
+  "im_open": {
+    "type": "im_open",
+    "user": "USLACKBOT",
+    "channel": "D0CJ1P4JJ"
+  }
+}

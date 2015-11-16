@@ -1,9 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var expect = require('chai').expect;
-var lodash = require('lodash');
 var nock = require('nock');
 var sinon = require('sinon');
-var ws = require('ws');
 
 var RtmAPIClient = require('../../../lib/clients/rtm/client');
 var MockWSServer = require('../../utils/mock-ws-server');
@@ -11,9 +9,6 @@ var WebAPIClient = require('../../../lib/clients/web/client');
 var clientEvents = require('../../../lib/clients/rtm/events/client-events');
 var transport = require('../../../lib/clients/web/transports/request');
 var wsSocket = require('../../../lib/clients/rtm/sockets/ws');
-
-var facets = require('../../../lib/clients/web/facets');
-var isOk = require('../../../lib/middleware/is-ok');
 
 
 describe('RTM API Client', function() {
@@ -78,8 +73,23 @@ describe('RTM API Client', function() {
     });
   });
 
-  it('should not attempt to reconnect while a reconnection is in progress', function() {
+  it('should not attempt to reconnect while a reconnection is in progress');
 
+  it('should process a raw message object, converting it to JSON with camelcased keys', function() {
+    var rtm = new RtmAPIClient(null, null, null, {});
+    var testMsg = {
+      "ok": true,
+      "reply_to": 1,
+      "ts": "1355517523.000005",
+      "text": "Hello world"
+    };
+    var message = rtm._processMessage(JSON.stringify(testMsg));
+    expect(message).to.deep.equal({
+      ok: true,
+      replyTo: 1,
+      ts: "1355517523.000005",
+      text: "Hello world"
+    });
   });
 
 });
