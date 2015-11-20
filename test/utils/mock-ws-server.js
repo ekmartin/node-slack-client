@@ -9,34 +9,34 @@ var create = require('lodash.create');
 var ws = require('ws');
 
 
-var MockWSServer = function(opts) {
-  ws.Server.call(this, opts);
+var MockWSServer = function (opts) {
+    ws.Server.call(this, opts);
 
-  this.on('connection', function(newWs) {
-    newWs.send(JSON.stringify({type: 'hello'}));
-    newWs.on('message', this.handleMessage);
-  });
+    this.on('connection', function (newWs) {
+        newWs.send(JSON.stringify({type: 'hello'}));
+        newWs.on('message', this.handleMessage);
+    });
 };
 
 
 MockWSServer.prototype = create(ws.Server.prototype, {
-  constructor: MockWSServer
+    constructor: MockWSServer
 });
 
 
-MockWSServer.prototype.handleMessage = function(message) {
+MockWSServer.prototype.handleMessage = function (message) {
 };
 
 
-MockWSServer.prototype.makeClosingWSS = function() {
-  // respond to the test message by closing the socket
-  var closeWS = function(message) {
-    message = JSON.parse(message);
-    if (message.type === 'close_socket') {
-      this.clients[0].close();
-    }
-  };
-  this.handleMessage = bind(closeWS, this);
+MockWSServer.prototype.makeClosingWSS = function () {
+    // respond to the test message by closing the socket
+    var closeWS = function (message) {
+        message = JSON.parse(message);
+        if (message.type === 'close_socket') {
+            this.clients[0].close();
+        }
+    };
+    this.handleMessage = bind(closeWS, this);
 };
 
 
