@@ -38,6 +38,58 @@
     "name": "display_real_names_override",
     "value": 1
   },
+  "team_domain_change": {
+    "type": "team_domain_change",
+    "url": "https://sslack-api-test.slack.com",
+    "domain": "sslack-api-test",
+    "event_ts": "1448005008.450131"
+  },
+  "team_join": {
+    "type": "team_join",
+    "user": {
+      "id": "U0EV582MU",
+      "team_id": "T0CHZBU59",
+      "name": "eve",
+      "deleted": false,
+      "status": null,
+      "color": "674b1b",
+      "real_name": "eve",
+      "tz": "America/Los_Angeles",
+      "tz_label": "Pacific Standard Time",
+      "tz_offset": -28800,
+      "profile": {
+        "first_name": "eve",
+        "real_name": "eve",
+        "real_name_normalized": "eve",
+        "email": "leah+slack-api-test+eve@slack-corp.com",
+        "image_24": "https://secure.gravatar.com/avatar/11eb4e78a6b5e83a6434e831df883179.jpg?s=24&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F66f9%2Fimg%2Favatars%2Fava_0017-24.png",
+        "image_32": "https://secure.gravatar.com/avatar/11eb4e78a6b5e83a6434e831df883179.jpg?s=32&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F66f9%2Fimg%2Favatars%2Fava_0017-32.png",
+        "image_48": "https://secure.gravatar.com/avatar/11eb4e78a6b5e83a6434e831df883179.jpg?s=48&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F66f9%2Fimg%2Favatars%2Fava_0017-48.png",
+        "image_72": "https://secure.gravatar.com/avatar/11eb4e78a6b5e83a6434e831df883179.jpg?s=72&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F66f9%2Fimg%2Favatars%2Fava_0017-72.png",
+        "image_192": "https://secure.gravatar.com/avatar/11eb4e78a6b5e83a6434e831df883179.jpg?s=192&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F7fa9%2Fimg%2Favatars%2Fava_0017-192.png",
+        "image_512": "https://secure.gravatar.com/avatar/11eb4e78a6b5e83a6434e831df883179.jpg?s=512&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F7fa9%2Fimg%2Favatars%2Fava_0017-512.png",
+        "fields": null
+      },
+      "is_admin": false,
+      "is_owner": false,
+      "is_primary_owner": false,
+      "is_restricted": false,
+      "is_ultra_restricted": false,
+      "is_bot": false,
+      "presence": "away"
+    },
+    "cache_ts": 1448005248
+  },
+  "team_pref_change" : {
+    "type": "team_pref_change",
+    "name": "require_at_for_mention",
+    "value": true
+  },
+  "team_rename": {
+    "type": "team_rename",
+    "name": "slack-api-test-test",
+    "event_ts": "1448004913.449540"
+  },
   "user_change": {
     "type": "user_change",
     "user": {

@@ -8,6 +8,7 @@ var MemoryDataStore = require('../../../lib/data-store').MemoryDataStore;
 var clientEventHandlers = require('../../../lib/clients/rtm/event-handlers');
 var getMemoryDataStore = require('../../utils/client').getMemoryDataStore;
 var getRtmClient = require('../../utils/client').getRtmClient;
+var models = require('../../../lib/models');
 var transport = require('../../../lib/clients/web/transports/request');
 
 var getRTMMessageFixture = require('../../fixtures').getRTMMessage;
@@ -35,14 +36,10 @@ describe('RTM API Event Handlers', function () {
 
             var testDMOpenStatus = function (isOpen, event) {
                 var dataStore = getMemoryDataStore();
-                dataStore.getDMByID(rtmStartFixture.ims[0].id).isOpen = isOpen;
-                var updatedMessage = clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
-                expect(updatedMessage).to.deep.equal({
-                    'type': event,
-                    'user': 'USLACKBOT',
-                    'channel': 'D0CJ1P4JJ'
-                });
-                expect(dataStore.getDMByID(rtmStartFixture.ims[0].id).isOpen).to.equal(isOpen);
+                dataStore.getDMById(rtmStartFixture.ims[0].id).isOpen = isOpen;
+                clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
+
+                expect(dataStore.getDMById(rtmStartFixture.ims[0].id).isOpen).to.equal(isOpen);
             };
 
             it('sets isOpen to true on a DM channel when an `im_open` message is received', lodash.partial(testDMOpenStatus, true, RTM_EVENTS.IM_OPEN));
@@ -94,6 +91,43 @@ describe('RTM API Event Handlers', function () {
 
         describe('`team_xxx` events', function () {
 
+            it('updates the team domain when a `team_domain_change` message is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers['team_domain_change']('', 'T0CHZBU59', dataStore, getRTMMessageFixture('team_domain_change'));
+                var team = dataStore.getTeamById('T0CHZBU59');
+
+                expect(team.url).to.equal('https://sslack-api-test.slack.com');
+                expect(team.domain).to.equal('sslack-api-test');
+            });
+
+            it('updates the team name when a `team_rename` message is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers['team_rename']('', 'T0CHZBU59', dataStore, getRTMMessageFixture('team_rename'));
+                var team = dataStore.getTeamById('T0CHZBU59');
+
+                expect(team.name).to.equal('slack-api-test-test');
+            });
+
+            it('updates a team preference when a `team_pref_change` message is received', function() {
+                var dataStore = getMemoryDataStore();
+                var prefChangeMsg = getRTMMessageFixture('team_pref_change');
+                clientEventHandlers['team_pref_change']('', 'T0CHZBU59', dataStore, prefChangeMsg);
+
+                var team = dataStore.getTeamById('T0CHZBU59');
+                expect(team.prefs[humps.camelize(prefChangeMsg.name)]).to.equal(prefChangeMsg.value);
+            });
+
+            it('adds a new user to a team when a `team_join` message is received', function() {
+                var dataStore = getMemoryDataStore();
+                var teamJoinMsg = getRTMMessageFixture('team_join');
+                clientEventHandlers['team_join'](dataStore, teamJoinMsg);
+
+                var user = dataStore.getUserById('U0EV582MU');
+                expect(user).to.be.an.instanceof(models.User);
+            });
+
         });
 
 
@@ -102,19 +136,17 @@ describe('RTM API Event Handlers', function () {
             it('updates a user preference when `pref_change` is received', function () {
                 var dataStore = getMemoryDataStore();
                 var prefChangeMsg = getRTMMessageFixture('pref_change');
-                var updatedMessage = clientEventHandlers['pref_change']('U0CJ5PC7L', '', dataStore, prefChangeMsg);
-                expect(updatedMessage).to.deep.equal(prefChangeMsg);
+                clientEventHandlers['pref_change']('U0CJ5PC7L', '', dataStore, prefChangeMsg);
 
-                var user = dataStore.getUserByID('U0CJ5PC7L');
+                var user = dataStore.getUserById('U0CJ5PC7L');
                 expect(user.prefs[humps.camelize(prefChangeMsg.name)]).to.equal(prefChangeMsg.value);
             });
 
             it('updates a channel, marking a user as typing when `user_typing` is received', function () {
                 var dataStore = getMemoryDataStore();
-                var channel = dataStore.getChannelByID('C0CHZA86Q');
+                var channel = dataStore.getChannelById('C0CHZA86Q');
                 var userTypingMsg = getRTMMessageFixture('user_typing');
-                var updatedMessage = clientEventHandlers['user_typing'](dataStore, userTypingMsg);
-                expect(updatedMessage).to.deep.equal(userTypingMsg);
+                clientEventHandlers['user_typing'](dataStore, userTypingMsg);
 
                 expect(channel._typing[userTypingMsg.user]).to.not.be.undefined;
             });
