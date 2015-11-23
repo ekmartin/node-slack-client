@@ -43,10 +43,31 @@ describe('RTM API Event Handlers', function () {
             };
 
             it('sets isOpen to true on a DM channel when an `im_open` message is received', lodash.partial(testDMOpenStatus, true, RTM_EVENTS.IM_OPEN));
+
             it('sets isOpen to false on a DM channel when an `im_close` message is received', lodash.partial(testDMOpenStatus, false, RTM_EVENTS.IM_CLOSE));
 
-            it('adds a new DM object when an `im_created` message is received and updates the `channel` property of the message');
-            it('marks the DM channel as read when an `im_marked` message is received and updates the `channel` properties to match');
+            it('adds a new DM object when an `im_created` message is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers['im_created'](dataStore, getRTMMessageFixture('im_created'));
+                var dmChannel = dataStore.getDMById('D0CHZQWNP');
+                expect(dmChannel).to.not.be.undefined;
+            });
+
+            it('marks the DM channel as read when an `im_marked` message is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                var dmChannel = dataStore.getDMById('D0CHZQWNP');
+                dmChannel.history.push({ts: 1});
+                dmChannel.history.push({ts: 2});
+                var originalUnreads = dmChannel.recalcUnreads();
+                expect(originalUnreads).to.equal(2);
+
+                clientEventHandlers['im_marked'](dataStore, getRTMMessageFixture('im_marked'));
+                var newUnreads = dmChannel.recalcUnreads();
+
+                expect(newUnreads).to.equal(0);
+            });
 
         });
 
