@@ -28,6 +28,72 @@
     "channel": "C0CJ25PDM",
     "user": "U0CJ5PC7L"
   },
+  "channel_created": {
+    "type": "channel_created",
+    "channel": {
+      "id": "C0F3Q8LH5",
+      "is_channel": true,
+      "name": "test-channel",
+      "created": 1448262090,
+      "creator": "U0F3LFX6K"
+    },
+    "event_ts": "1448262090.810507"
+  },
+  "channel_deleted": {
+    "type": "channel_deleted",
+    "channel": "C0CJ25PDM"
+  },
+  "channel_joined": {
+    "type": "channel_joined",
+    "channel": {
+      "id": "C0CJ25PDM",
+      "name": "test-channel-join",
+      "is_channel": true,
+      "created": 1448262357,
+      "creator": "U0F3LFX6K",
+      "is_archived": false,
+      "is_general": false,
+      "is_member": true,
+      "last_read": "1448262357.000002",
+      "latest": {
+        "user": "U0F3LFX6K",
+        "type": "message",
+        "subtype": "channel_join",
+        "text": "<@U0F3LFX6K|carol> has joined the channel",
+        "ts": "1448262357.000002"
+      },
+      "unread_count": 0,
+      "unread_count_display": 0,
+      "members": [
+        "U0CJ5PC7L",
+        "U0F3LFX6K"
+      ],
+      "topic": {
+        "value": "",
+        "creator": "",
+        "last_set": 0
+      },
+      "purpose": {
+        "value": "",
+        "creator": "",
+        "last_set": 0
+      }
+    }
+  },
+  "channel_left": {
+    "type": "channel_left",
+    "channel": "C0CJ25PDM"
+  },
+  "channel_rename": {
+    "type": "channel_rename",
+    "channel": {
+      "id": "C0F3Q8LH5",
+      "is_channel": true,
+      "name": "test-channel-rename",
+      "created": "1448262090"
+    },
+    "event_ts": "1448262186.810954"
+  },
   "channel_unarchive": {
     "type": "channel_unarchive",
     "channel": "C0CJ25PDM",
