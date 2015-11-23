@@ -15,6 +15,10 @@ var getRTMMessageFixture = require('../../fixtures').getRTMMessage;
 var rtmStartFixture = require('../../fixtures/rtm.start');
 
 
+var ALICE_USER_ID = 'U0CJ5PC7L';
+var TEST_CHANNEL_ID = 'C0CJ25PDM';
+
+
 describe('RTM API Event Handlers', function () {
 
     describe('Raw Events', function () {
@@ -102,7 +106,7 @@ describe('RTM API Event Handlers', function () {
                 var dataStore = getMemoryDataStore();
 
                 clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
-                var channel = dataStore.getChannelById('C0CJ25PDM');
+                var channel = dataStore.getChannelById(TEST_CHANNEL_ID);
                 expect(channel.isArchived).to.equal(expected);
             };
 
@@ -118,7 +122,7 @@ describe('RTM API Event Handlers', function () {
                 var dataStore = getMemoryDataStore();
 
                 clientEventHandlers['channel_rename'](dataStore, getRTMMessageFixture('channel_rename'));
-                var channel = dataStore.getChannelById('C0CJ25PDM');
+                var channel = dataStore.getChannelById(TEST_CHANNEL_ID);
                 expect(channel.name).to.equal('test-channel-rename');
             });
 
@@ -134,7 +138,7 @@ describe('RTM API Event Handlers', function () {
                 var dataStore = getMemoryDataStore();
 
                 clientEventHandlers['channel_deleted'](dataStore, getRTMMessageFixture('channel_deleted'));
-                var channel = dataStore.getChannelById('C0CJ25PDM');
+                var channel = dataStore.getChannelById(TEST_CHANNEL_ID);
                 expect(channel).to.be.undefined;
             });
 
@@ -142,15 +146,21 @@ describe('RTM API Event Handlers', function () {
                 var dataStore = getMemoryDataStore();
 
                 clientEventHandlers['channel_joined'](dataStore, getRTMMessageFixture('channel_joined'));
-                var channel = dataStore.getChannelById('C0CJ25PDM');
+                var channel = dataStore.getChannelById(TEST_CHANNEL_ID);
                 expect(channel.members).to.have.length(2);
                 expect(channel).to.have.deep.property('members[1]', 'U0F3LFX6K');
             });
 
-            it('`channel_left`');
+            it('removes the user from a channel when a `channel_left` message is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers['channel_left'](ALICE_USER_ID, '', dataStore, getRTMMessageFixture('channel_left'));
+                var channel = dataStore.getChannelById(TEST_CHANNEL_ID);
+                expect(channel.members).to.not.contain(ALICE_USER_ID);
+            });
             
-            it('`channel_marked`', function() {
-                testBaseChannelMarked('channel_marked', 'C0CJ25PDM');
+            it('marks the channel as read when a `channel_marked` message is received', function() {
+                testBaseChannelMarked('channel_marked', TEST_CHANNEL_ID);
             });
 
         });
@@ -217,9 +227,9 @@ describe('RTM API Event Handlers', function () {
             it('updates a user preference when `pref_change` is received', function () {
                 var dataStore = getMemoryDataStore();
                 var prefChangeMsg = getRTMMessageFixture('pref_change');
-                clientEventHandlers['pref_change']('U0CJ5PC7L', '', dataStore, prefChangeMsg);
+                clientEventHandlers['pref_change'](ALICE_USER_ID, '', dataStore, prefChangeMsg);
 
-                var user = dataStore.getUserById('U0CJ5PC7L');
+                var user = dataStore.getUserById(ALICE_USER_ID);
                 expect(user.prefs[humps.camelize(prefChangeMsg.name)]).to.equal(prefChangeMsg.value);
             });
 
