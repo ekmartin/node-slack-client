@@ -93,6 +93,32 @@ describe('RTM API Event Handlers', function () {
 
         describe('`channel_xxx` events', function () {
 
+            var isArchivedChange = function (event, expected) {
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
+                var channel = dataStore.getChannelById('C0CJ25PDM');
+                expect(channel.isArchived).to.equal(expected);
+            };
+
+            it('sets isArchived to true on a channel when a `channel_archive` message is received', function() {
+                isArchivedChange('channel_archive', true);
+            });
+
+            it('sets isArchived to false on a channel when a `channel_unarchive` message is received', function() {
+                isArchivedChange('channel_unarchive', false);
+            });
+
+            it('renames a channel when a `channel_rename` message is received');
+
+            it('creates a new channel when a `channel_created` message is received');
+
+            it('deletes a channel when a `channel_deleted` message is received');
+
+            it('`channel_joined`');
+            it('`channel_left`');
+            it('`channel_marked`');
+
         });
 
         describe('`group_xxx` events', function () {

@@ -23,6 +23,16 @@
     },
     "cache_ts": 1448003197
   },
+  "channel_archive": {
+    "type": "channel_archive",
+    "channel": "C0CJ25PDM",
+    "user": "U0CJ5PC7L"
+  },
+  "channel_unarchive": {
+    "type": "channel_unarchive",
+    "channel": "C0CJ25PDM",
+    "user": "U0CJ5PC7L"
+  },
   "im_close": {
     "type": "im_close",
     "user": "USLACKBOT",
