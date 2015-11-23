@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "coffee-script": "~1.9.3",
-    "debug": "^2.2.0",
     "humps": "^1.0.0",
     "lodash.assign": "^3.2.0",
     "lodash.bind": "^3.1.0",
@@ -36,6 +35,7 @@
     "lodash.startswith": "^3.0.1",
     "lodash.zipobject": "^3.0.0",
     "request": "^2.64.0",
+    "winston": "^2.1.1",
     "ws": "0.8.0"
   },
   "devDependencies": {
