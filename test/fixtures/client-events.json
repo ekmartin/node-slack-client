@@ -28,6 +28,30 @@
     "user": "USLACKBOT",
     "channel": "D0CJ1P4JJ"
   },
+  "im_created": {
+    "type": "im_created",
+    "user": "U0F3LFX6K",
+    "channel": {
+      "id": "D0F3HHAQ3",
+      "is_im": true,
+      "user": "U0F3LFX6K",
+      "created": 1448254082,
+      "last_read": "0000000000.000000",
+      "latest": null,
+      "unread_count": 0,
+      "unread_count_display": 0,
+      "is_open": false
+    }
+  },
+  "im_marked": {
+    "type": "im_marked",
+    "channel": "D0CHZQWNP",
+    "ts": "1448253718.000002",
+    "dm_count": 0,
+    "unread_count_display": 0,
+    "num_mentions_display": 0,
+    "mention_count_display": 0
+  },
   "im_open": {
     "type": "im_open",
     "user": "USLACKBOT",
