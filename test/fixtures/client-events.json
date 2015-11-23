@@ -47,14 +47,14 @@
     "type": "channel_joined",
     "channel": {
       "id": "C0CJ25PDM",
-      "name": "test-channel-join",
+      "name": "test",
       "is_channel": true,
-      "created": 1448262357,
-      "creator": "U0F3LFX6K",
+      "created": 1444959237,
+      "creator": "U0CJ5PC7L",
       "is_archived": false,
       "is_general": false,
       "is_member": true,
-      "last_read": "1448262357.000002",
+      "last_read": "0000000000.000000",
       "latest": {
         "user": "U0F3LFX6K",
         "type": "message",
@@ -84,10 +84,21 @@
     "type": "channel_left",
     "channel": "C0CJ25PDM"
   },
+  "channel_marked": {
+    "type": "channel_marked",
+    "channel": "C0CJ25PDM",
+    "ts": "1448253718.000002",
+    "unread_count": 0,
+    "unread_count_display": 0,
+    "num_mentions": 0,
+    "num_mentions_display": 0,
+    "mention_count": 0,
+    "mention_count_display": 0
+  },
   "channel_rename": {
     "type": "channel_rename",
     "channel": {
-      "id": "C0F3Q8LH5",
+      "id": "C0CJ25PDM",
       "is_channel": true,
       "name": "test-channel-rename",
       "created": "1448262090"

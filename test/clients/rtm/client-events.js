@@ -32,6 +32,22 @@ describe('RTM API Event Handlers', function () {
 
     describe('Parsed Events', function () {
 
+        var testBaseChannelMarked = function(event, baseChannelId) {
+            var dataStore = getMemoryDataStore();
+
+            var baseChannel = dataStore.getChannelGroupOrDMById(baseChannelId);
+            baseChannel.history.push({ts: 1});
+            baseChannel.history.push({ts: 2});
+
+            var originalUnreads = baseChannel.recalcUnreads();
+            expect(originalUnreads).to.equal(2);
+
+            clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
+            var newUnreads = baseChannel.recalcUnreads();
+
+            expect(newUnreads).to.equal(0);
+        };
+
         describe('`im_xxx` events', function () {
 
             var testDMOpenStatus = function (isOpen, event) {
@@ -55,18 +71,7 @@ describe('RTM API Event Handlers', function () {
             });
 
             it('marks the DM channel as read when an `im_marked` message is received', function() {
-                var dataStore = getMemoryDataStore();
-
-                var dmChannel = dataStore.getDMById('D0CHZQWNP');
-                dmChannel.history.push({ts: 1});
-                dmChannel.history.push({ts: 2});
-                var originalUnreads = dmChannel.recalcUnreads();
-                expect(originalUnreads).to.equal(2);
-
-                clientEventHandlers['im_marked'](dataStore, getRTMMessageFixture('im_marked'));
-                var newUnreads = dmChannel.recalcUnreads();
-
-                expect(newUnreads).to.equal(0);
+                testBaseChannelMarked('im_marked', 'D0CHZQWNP');
             });
 
         });
@@ -109,15 +114,44 @@ describe('RTM API Event Handlers', function () {
                 isArchivedChange('channel_unarchive', false);
             });
 
-            it('renames a channel when a `channel_rename` message is received');
+            it('renames a channel when a `channel_rename` message is received', function() {
+                var dataStore = getMemoryDataStore();
 
-            it('creates a new channel when a `channel_created` message is received');
+                clientEventHandlers['channel_rename'](dataStore, getRTMMessageFixture('channel_rename'));
+                var channel = dataStore.getChannelById('C0CJ25PDM');
+                expect(channel.name).to.equal('test-channel-rename');
+            });
 
-            it('deletes a channel when a `channel_deleted` message is received');
+            it('creates a new channel when a `channel_created` message is received', function() {
+                var dataStore = getMemoryDataStore();
 
-            it('`channel_joined`');
+                clientEventHandlers['channel_created'](dataStore, getRTMMessageFixture('channel_created'));
+                var channel = dataStore.getChannelById('C0F3Q8LH5');
+                expect(channel).to.not.be.undefined;
+            });
+
+            it('deletes a channel when a `channel_deleted` message is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers['channel_deleted'](dataStore, getRTMMessageFixture('channel_deleted'));
+                var channel = dataStore.getChannelById('C0CJ25PDM');
+                expect(channel).to.be.undefined;
+            });
+
+            it('creates a new channel object and replaces the old one when a `channel_joined` message is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers['channel_joined'](dataStore, getRTMMessageFixture('channel_joined'));
+                var channel = dataStore.getChannelById('C0CJ25PDM');
+                expect(channel.members).to.have.length(2);
+                expect(channel).to.have.deep.property('members[1]', 'U0F3LFX6K');
+            });
+
             it('`channel_left`');
-            it('`channel_marked`');
+            
+            it('`channel_marked`', function() {
+                testBaseChannelMarked('channel_marked', 'C0CJ25PDM');
+            });
 
         });
 
