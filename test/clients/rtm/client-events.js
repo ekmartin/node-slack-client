@@ -151,7 +151,13 @@ describe('RTM API Event Handlers', function () {
                 expect(channel._typing[userTypingMsg.user]).to.not.be.undefined;
             });
 
-            it('adds a new user or updates an existing user when a `user_change` event is received');
+            it('adds a new user or updates an existing user when a `user_change` event is received', function() {
+                var dataStore = getMemoryDataStore();
+                clientEventHandlers['user_change'](dataStore, getRTMMessageFixture('user_change'));
+
+                var user = dataStore.getUserById('U0CJ1TWKX');
+                expect(user.profile.email).to.equal('leah+slack-api-test-user-change-test@slack-corp.com');
+            });
 
         });
 
