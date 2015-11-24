@@ -29,10 +29,17 @@ describe('RTM API Event Handlers', function () {
                 expect(rawMsg).to.deep.equal(getRTMMessageFixture('im_open', true));
                 done();
             });
-            rtmClient.handleWsMessage(getRTMMessageFixture('im_open', true));
+            rtmClient.handleWsMessage(JSON.stringify(getRTMMessageFixture('im_open', true)));
         });
 
-        it('should emit raw messages with snake case keys unchanged');
+        it('should emit raw messages with snake case keys changed to camelcase', function(done) {
+            var rtmClient = getRtmClient();
+            rtmClient.on('raw::manual_presence_change', function(rawMsg) {
+                expect(rawMsg).to.have.deep.property('eventTs');
+                done();
+            });
+            rtmClient.handleWsMessage(JSON.stringify(getRTMMessageFixture('manual_presence_change', true)));
+        });
     });
 
     describe('Parsed Events', function () {
