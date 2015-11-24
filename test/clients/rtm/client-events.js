@@ -166,7 +166,7 @@ describe('RTM API Event Handlers', function () {
         });
 
         describe('`group_xxx` events', function () {
-
+            
         });
 
 
