@@ -13,14 +13,5 @@ class DM extends Channel
         
     # TODO: Emit event for unread history
 
-  close: ->
-    params = {
-      "channel": @id
-    }
-
-    @_client._apiCall 'im.close', params, @_onClose
-
-  _onClose: (data) =>
-    @_client.logger.debug data
 
 module.exports = DM
