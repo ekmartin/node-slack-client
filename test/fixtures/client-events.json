@@ -144,10 +144,20 @@
     "user": "USLACKBOT",
     "channel": "D0CJ1P4JJ"
   },
+  "manual_presence_change": {
+    "type": "manual_presence_change",
+    "presence": "away",
+    "event_ts": "1448323107.373650"
+  },
   "pref_change": {
     "type": "pref_change",
     "name": "display_real_names_override",
     "value": 1
+  },
+  "presence_change": {
+    "type": "presence_change",
+    "user": "U0CJ5PC7L",
+    "presence": "away"
   },
   "team_domain_change": {
     "type": "team_domain_change",

@@ -172,8 +172,23 @@ describe('RTM API Event Handlers', function () {
 
         describe('`presence_xxx` events', function () {
 
-        });
+            it('should set the user presence to match the message presence when a `manual_presence_change` message is received', function(){
+                var dataStore = getMemoryDataStore();
 
+                clientEventHandlers['manual_presence_change'](ALICE_USER_ID, '', dataStore, getRTMMessageFixture('manual_presence_change'));
+                var user = dataStore.getUserById(ALICE_USER_ID);
+                expect(user.presence).to.equal('away');
+            });
+
+            it('should set the user presence to match the message presence when a `presence_change` message is received', function(){
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers['presence_change'](dataStore, getRTMMessageFixture('presence_change'));
+                var user = dataStore.getUserById(ALICE_USER_ID);
+                expect(user.presence).to.equal('away');
+            });
+
+        });
 
         describe('star_xxx`` events', function () {
             describe('star_added', function() {
