@@ -345,6 +345,15 @@ describe('RTM API Event Handlers', function () {
 
         describe('message events', function() {
 
+            var testMessageAdd = function(event, baseChannelId, expectedSubtype) {
+                var dataStore = getMemoryDataStore();
+                clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
+                var baseChannel = dataStore.getChannelGroupOrDMById(baseChannelId);
+
+                expect(baseChannel.history[baseChannel.history.length - 1]).to.have.property('subtype', expectedSubtype);
+                expect(baseChannel.history).to.have.length(2);
+            };
+
             var testBaseChannelJoin = function(event, baseChannelId, expectedUser) {
                 var dataStore = getMemoryDataStore();
                 clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
@@ -378,6 +387,19 @@ describe('RTM API Event Handlers', function () {
             it('removes a user from a group and updates message history when a `group_leave` message is received', function() {
                 testBaseChannelLeave('message::group_leave', 'G0CHZSXFW', 'U0F3LFX6K');
             });
+
+            it('adds an item to message history when a `channel_archive` message is received', function() {
+                testMessageAdd('message::channel_archive', 'C0CJ25PDM', 'channel_archive');
+            });
+
+            it('adds an item to message history when a `group_archive` message is received', function() {
+                testMessageAdd('message::group_archive', 'G0CHZSXFW', 'group_archive');
+            });
+
+            it('adds an item to message history when a `group_unarchive` message is received', function() {
+                testMessageAdd('message::group_unarchive', 'G0CHZSXFW', 'group_unarchive');
+            });
+
 
         });
 

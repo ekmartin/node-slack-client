@@ -226,6 +226,18 @@
     "presence": "away",
     "event_ts": "1448323107.373650"
   },
+  "message::channel_archive": {
+    "user": "U0F3LFX6K",
+    "members": [
+      "U0CJ5PC7L",
+      "U0F3LFX6K"
+    ],
+    "type": "message",
+    "subtype": "channel_archive",
+    "text": "<@U0F3LFX6K|carol> archived the channel (w/ 2 members)",
+    "channel": "C0CJ25PDM",
+    "ts": "1448491518.000007"
+  },
   "message::channel_join": {
     "user": "U0F3LFX6K",
     "inviter": "U0CJ5PC7L",
@@ -243,6 +255,14 @@
     "channel": "C0CJ25PDM",
     "ts": "1448413366.000003"
   },
+  "message::group_archive": {
+    "user": "U0F3LFX6K",
+    "type": "message",
+    "subtype": "group_archive",
+    "text": "<@U0F3LFX6K|carol> archived the private channel",
+    "channel": "G0CHZSXFW",
+    "ts": "1448490710.000005"
+  },
   "message::group_join": {
     "user": "U0F3LFX6K",
     "inviter": "U0CJ5PC7L",
@@ -259,6 +279,14 @@
     "text": "<@U0F3LFX6K|carol> has left the group",
     "channel": "G0CHZSXFW",
     "ts": "1448486522.000002"
+  },
+  "message::group_unarchive": {
+    "user": "U0F3LFX6K",
+    "type": "message",
+    "subtype": "group_unarchive",
+    "text": "<@U0F3LFX6K|carol> un-archived the private channel",
+    "channel": "G0CHZSXFW",
+    "ts": "1448490716.000007"
   },
   "pref_change": {
     "type": "pref_change",
