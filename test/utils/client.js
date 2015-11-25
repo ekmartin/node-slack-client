@@ -17,7 +17,7 @@ var getRtmClient = function () {
     var webClient;
     var rtmClient;
     webClient = new WebAPIClient('fake-token', transport);
-    rtmClient = new RtmAPIClient(webClient, fakeWs, new EventEmitter());
+    rtmClient = new RtmAPIClient(webClient, fakeWs);
     sinon.stub(webClient.rtm, 'start', function (opts, cb) {
         cb(null, rtmStartFixture);
     });

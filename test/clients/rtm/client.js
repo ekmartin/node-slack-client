@@ -1,4 +1,3 @@
-var EventEmitter = require('events').EventEmitter;
 var expect = require('chai').expect;
 var nock = require('nock');
 var sinon = require('sinon');
@@ -34,7 +33,7 @@ describe('RTM API Client', function () {
             maxPongInterval: 2,
             reconnectionBackoff: 1
         };
-        var rtm = new RtmAPIClient(webClient, wsSocket, new EventEmitter(), opts);
+        var rtm = new RtmAPIClient(webClient, wsSocket, opts);
         sinon.spy(rtm, 'reconnect');
         rtm.start();
 
@@ -55,7 +54,7 @@ describe('RTM API Client', function () {
         var opts = {
             reconnectionBackoff: 1
         };
-        var rtm = new RtmAPIClient(webClient, wsSocket, new EventEmitter(), opts);
+        var rtm = new RtmAPIClient(webClient, wsSocket, opts);
         sinon.spy(rtm, 'reconnect');
         rtm.start();
 
@@ -63,7 +62,7 @@ describe('RTM API Client', function () {
         rtm.on(clientEvents.OPENED_RTM_CONNECTION, function () {
             rtmConnCount++;
             if (rtmConnCount === 1) {
-                rtm._wsSendMsg({type: 'close_socket'});
+                rtm.send({type: 'close_socket'});
             }
 
             if (rtmConnCount === 2) {
