@@ -227,16 +227,16 @@
     "event_ts": "1448323107.373650"
   },
   "message::channel_join": {
-    "user": "U0CJ5PC7L",
+    "user": "U0F3LFX6K",
     "inviter": "U0CJ5PC7L",
     "type": "message",
     "subtype": "channel_join",
-    "text": "<@U0CJ5PC7L|carol> has joined the channel",
+    "text": "<@U0F3LFX6K|carol> has joined the channel",
     "channel": "C0CJ25PDM",
     "ts": "1448413360.000002"
   },
   "message::channel_leave": {
-    "user": "U0CJ5PC7L",
+    "user": "U0F3LFX6K",
     "type": "message",
     "subtype": "channel_leave",
     "text": "<@U0F3LFX6K|carol> has left the channel",

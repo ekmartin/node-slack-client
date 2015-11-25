@@ -82,7 +82,7 @@ describe('RTM API Event Handlers', function () {
                 baseChannel.history.push({ts: 2});
 
                 var originalUnreads = baseChannel.recalcUnreads();
-                expect(originalUnreads).to.equal(2);
+                expect(originalUnreads).to.equal(3);
 
                 clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
                 var newUnreads = baseChannel.recalcUnreads();
@@ -340,6 +340,21 @@ describe('RTM API Event Handlers', function () {
                 var user = dataStore.getUserById('U0CJ1TWKX');
                 expect(user.profile.email).to.equal('leah+slack-api-test-user-change-test@slack-corp.com');
             });
+
+        });
+
+        describe('message events', function() {
+
+            it('adds a user to a channel and updates message history when a `channel_join` message is received', function() {
+                var dataStore = getMemoryDataStore();
+                clientEventHandlers['message::channel_join'](dataStore, getRTMMessageFixture('message::channel_join'));
+                var channel = dataStore.getChannelById('C0CJ25PDM');
+
+                expect(channel.members).to.contain('U0F3LFX6K');
+                expect(channel.history).to.have.length(2);
+            });
+
+            it('adds a user to a group and updates message history when a `group_join` message is received');
 
         });
 
