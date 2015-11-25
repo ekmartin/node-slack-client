@@ -345,16 +345,39 @@ describe('RTM API Event Handlers', function () {
 
         describe('message events', function() {
 
-            it('adds a user to a channel and updates message history when a `channel_join` message is received', function() {
+            var testBaseChannelJoin = function(event, baseChannelId, expectedUser) {
                 var dataStore = getMemoryDataStore();
-                clientEventHandlers['message::channel_join'](dataStore, getRTMMessageFixture('message::channel_join'));
-                var channel = dataStore.getChannelById('C0CJ25PDM');
+                clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
+                var baseChannel = dataStore.getChannelGroupOrDMById(baseChannelId);
 
-                expect(channel.members).to.contain('U0F3LFX6K');
-                expect(channel.history).to.have.length(2);
+                expect(baseChannel.members).to.contain(expectedUser);
+                expect(baseChannel.history).to.have.length(2);
+            };
+
+            var testBaseChannelLeave = function(event, baseChannelId, expectedUser) {
+                var dataStore = getMemoryDataStore();
+                clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
+                var baseChannel = dataStore.getChannelGroupOrDMById(baseChannelId);
+
+                expect(baseChannel.members).to.not.contain(expectedUser);
+                expect(baseChannel.history).to.have.length(2);
+            };
+
+            it('adds a user to a channel and updates message history when a `channel_join` message is received', function() {
+                testBaseChannelJoin('message::channel_join', 'C0CJ25PDM', 'U0F3LFX6K');
             });
 
-            it('adds a user to a group and updates message history when a `group_join` message is received');
+            it('adds a user to a group and updates message history when a `group_join` message is received', function() {
+                testBaseChannelJoin('message::group_join', 'G0CHZSXFW', 'U0F3LFX6K');
+            });
+
+            it('removes a user from a channel and updates message history when a `channel_leave` message is received', function() {
+                testBaseChannelLeave('message::channel_leave', 'C0CJ25PDM', 'U0F3LFX6K');
+            });
+
+            it('removes a user from a group and updates message history when a `group_leave` message is received', function() {
+                testBaseChannelLeave('message::group_leave', 'G0CHZSXFW', 'U0F3LFX6K');
+            });
 
         });
 

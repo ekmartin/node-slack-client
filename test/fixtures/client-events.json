@@ -243,6 +243,23 @@
     "channel": "C0CJ25PDM",
     "ts": "1448413366.000003"
   },
+  "message::group_join": {
+    "user": "U0F3LFX6K",
+    "inviter": "U0CJ5PC7L",
+    "type": "message",
+    "subtype": "group_join",
+    "text": "<@U0F3LFX6K|carol> has joined the group",
+    "channel": "G0CHZSXFW",
+    "ts": "1448486574.000003"
+  },
+  "message::group_leave": {
+    "user": "U0F3LFX6K",
+    "type": "message",
+    "subtype": "group_leave",
+    "text": "<@U0F3LFX6K|carol> has left the group",
+    "channel": "G0CHZSXFW",
+    "ts": "1448486522.000002"
+  },
   "pref_change": {
     "type": "pref_change",
     "name": "display_real_names_override",
