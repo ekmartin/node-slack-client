@@ -44,12 +44,10 @@ describe('MemoryDataStore', function () {
     });
 
     describe('#clear()', function () {
-        it('should re-set the indices when clear() is called', function () {
+        it('should re-set the objects when clear() is called', function () {
             var dataStore = getMemoryDataStore();
-            dataStore.setChannel({id: 'C1', name: 'test'});
-            expect(dataStore._indices).to.have.deep.property('channels.name.test', 'C1');
             dataStore.clear();
-            expect(dataStore._indices.channels).to.deep.equal({name: {}});
+            expect(dataStore.users).to.be.empty;
         });
     });
 

@@ -400,7 +400,25 @@ describe('RTM API Event Handlers', function () {
                 testMessageAdd('message::group_unarchive', 'G0CHZSXFW', 'group_unarchive');
             });
 
+            it('deletes a message when a `message_delete` message is received', function() {
+                var dataStore = getMemoryDataStore();
+                var initialMsg = {
+                    "type": "message",
+                    "channel": "C0CJ25PDM",
+                    "user": "U0F3LFX6K",
+                    "text": "I'm going to delete this message Carol",
+                    "ts": "1448496776.000003",
+                    "team": "T0CHZBU59"
+                };
+                var channel = dataStore.getChannelById('C0CJ25PDM');
+                channel.addMessage(initialMsg);
 
+                clientEventHandlers['message::message_deleted'](dataStore, getRTMMessageFixture('message::message_deleted'));
+                expect(channel.history).to.have.length(2);
+                expect(channel.history[1]).to.have.property('subtype', 'message_deleted');
+            });
+
+            it('updates a message when a `message_edited` message is received');
         });
 
     });

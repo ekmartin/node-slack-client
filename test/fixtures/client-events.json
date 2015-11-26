@@ -288,6 +288,33 @@
     "channel": "G0CHZSXFW",
     "ts": "1448490716.000007"
   },
+  "message::message_changed": {
+    "type": "message",
+    "message": {
+      "type": "message",
+      "user": "U0F3LFX6K",
+      "text": "Hi carol! :simple_smile:",
+      "edited": {
+        "user": "U0F3LFX6K",
+        "ts": "1448496795.000000"
+      },
+      "ts": "1448496754.000002"
+    },
+    "subtype": "message_changed",
+    "hidden": true,
+    "channel": "C0CJ25PDM",
+    "event_ts": "1448496795.861984",
+    "ts": "1448496795.000005"
+  },
+  "message::message_deleted": {
+    "type": "message",
+    "deleted_ts": "1448496776.000003",
+    "subtype": "message_deleted",
+    "hidden": true,
+    "channel": "C0CJ25PDM",
+    "event_ts": "1448496783.861926",
+    "ts": "1448496783.000004"
+  },
   "pref_change": {
     "type": "pref_change",
     "name": "display_real_names_override",
