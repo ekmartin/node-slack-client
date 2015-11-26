@@ -419,6 +419,19 @@ describe('RTM API Event Handlers', function () {
             });
 
             it('updates a message when a `message_edited` message is received');
+
+            //    case MESSAGE_SUBTYPES.CHANNEL_TOPIC:
+            //    case MESSAGE_SUBTYPES.GROUP_TOPIC:
+            //        // update the topic
+            //    case MESSAGE_SUBTYPES.CHANNEL_PURPOSE:
+            //    case MESSAGE_SUBTYPES.GROUP_PURPOSE:
+            //        // update the purpose
+            //    case MESSAGE_SUBTYPES.CHANNEL_NAME:
+            //    case MESSAGE_SUBTYPES.GROUP_NAME:
+            //        // update the name
+            //    case MESSAGE_SUBTYPES.BOT_MESSAGE:
+            //        // do something here?
+
         });
 
     });
