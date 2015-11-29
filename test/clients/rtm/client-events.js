@@ -418,7 +418,22 @@ describe('RTM API Event Handlers', function () {
                 expect(channel.history[1]).to.have.property('subtype', 'message_deleted');
             });
 
-            it('updates a message when a `message_edited` message is received');
+            it('updates a message when a `message_changed` message is received', function() {
+                var dataStore = getMemoryDataStore();
+                var initialMsg = {
+                    "type": "message",
+                    "channel": "C0CJ25PDM",
+                    "user": "U0F3LFX6K",
+                    "text": "Howdy Carol",
+                    "ts": "1448496754.000002",
+                    "team": "T0CHZBU59"
+                };
+                var channel = dataStore.getChannelById('C0CJ25PDM');
+                channel.addMessage(initialMsg);
+
+                clientEventHandlers['message::message_changed'](dataStore, getRTMMessageFixture('message::message_changed'));
+                expect(channel.history[1]).to.have.property('text', 'Howdy Carol');
+            });
 
             //    case MESSAGE_SUBTYPES.CHANNEL_TOPIC:
             //    case MESSAGE_SUBTYPES.GROUP_TOPIC:
