@@ -255,6 +255,16 @@
     "channel": "C0CJ25PDM",
     "ts": "1448413366.000003"
   },
+  "message::channel_name": {
+    "user": "U0F3LFX6K",
+    "old_name": "test",
+    "name": "test-channel-rename",
+    "type": "message",
+    "subtype": "channel_name",
+    "text": "<@U0F3LFX6K|carol> has renamed the channel from \"test\" to \"test-channel-rename\"",
+    "channel": "C0CJ25PDM",
+    "ts": "1449034681.000004"
+  },
   "message::group_archive": {
     "user": "U0F3LFX6K",
     "type": "message",
@@ -279,6 +289,16 @@
     "text": "<@U0F3LFX6K|carol> has left the group",
     "channel": "G0CHZSXFW",
     "ts": "1448486522.000002"
+  },
+  "message::group_name": {
+    "user": "U0CJ5PC7L",
+    "old_name": "private",
+    "name": "private-rename",
+    "type": "message",
+    "subtype": "group_name",
+    "text": "<@U0CJ5PC7L|alice> has renamed the group from \"private\" to \"private-rename\"",
+    "channel": "G0CHZSXFW",
+    "ts": "1449034974.000003"
   },
   "message::group_unarchive": {
     "user": "U0F3LFX6K",
