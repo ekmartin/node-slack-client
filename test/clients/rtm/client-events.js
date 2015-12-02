@@ -347,7 +347,7 @@ describe('RTM API Event Handlers', function () {
 
             var testMessageAdd = function(event, baseChannelId, expectedSubtype) {
                 var dataStore = getMemoryDataStore();
-                clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
+                clientEventHandlers['message::rtm_client_add_message'](dataStore, getRTMMessageFixture(event));
                 var baseChannel = dataStore.getChannelGroupOrDMById(baseChannelId);
 
                 expect(baseChannel.history[baseChannel.history.length - 1]).to.have.property('subtype', expectedSubtype);
@@ -388,16 +388,8 @@ describe('RTM API Event Handlers', function () {
                 testBaseChannelLeave('message::group_leave', 'G0CHZSXFW', 'U0F3LFX6K');
             });
 
-            it('adds an item to message history when a `channel_archive` message is received', function() {
+            it('adds an item to message history when a message with no custom handler is received', function() {
                 testMessageAdd('message::channel_archive', TEST_CHANNEL_ID, 'channel_archive');
-            });
-
-            it('adds an item to message history when a `group_archive` message is received', function() {
-                testMessageAdd('message::group_archive', 'G0CHZSXFW', 'group_archive');
-            });
-
-            it('adds an item to message history when a `group_unarchive` message is received', function() {
-                testMessageAdd('message::group_unarchive', 'G0CHZSXFW', 'group_unarchive');
             });
 
             it('deletes a message when a `message_delete` message is received', function() {
@@ -435,26 +427,6 @@ describe('RTM API Event Handlers', function () {
                 expect(channel.history).to.have.length(3);
                 expect(channel.history[1]).to.have.property('text', 'Hi carol! :simple_smile:');
             });
-
-            it('adds an item to message history when a `channel_name` message is received', function() {
-                testMessageAdd('message::channel_name', TEST_CHANNEL_ID, 'channel_name');
-            });
-
-            it('adds an item to message history when a `group_name` message is received', function() {
-                testMessageAdd('message::group_name', TEST_GROUP_ID, 'group_name');
-            });
-
-            //    case MESSAGE_SUBTYPES.CHANNEL_TOPIC:
-            //    case MESSAGE_SUBTYPES.GROUP_TOPIC:
-            //        // update the topic
-            //    case MESSAGE_SUBTYPES.CHANNEL_PURPOSE:
-            //    case MESSAGE_SUBTYPES.GROUP_PURPOSE:
-            //        // update the purpose
-            //    case MESSAGE_SUBTYPES.CHANNEL_NAME:
-            //    case MESSAGE_SUBTYPES.GROUP_NAME:
-            //        // update the name
-            //    case MESSAGE_SUBTYPES.BOT_MESSAGE:
-            //        // do something here?
 
         });
 
