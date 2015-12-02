@@ -5,11 +5,11 @@
  */
 
 var bind = require('lodash.bind');
-var create = require('lodash.create');
+var inherits = require('inherits');
 var ws = require('ws');
 
 
-var MockWSServer = function (opts) {
+var MockWSServer = function(opts) {
     ws.Server.call(this, opts);
 
     this.on('connection', function (newWs) {
@@ -18,17 +18,14 @@ var MockWSServer = function (opts) {
     });
 };
 
-
-MockWSServer.prototype = create(ws.Server.prototype, {
-    constructor: MockWSServer
-});
+inherits(MockWSServer, ws.Server);
 
 
-MockWSServer.prototype.handleMessage = function (message) {
+MockWSServer.prototype.handleMessage = function(message) {
 };
 
 
-MockWSServer.prototype.makeClosingWSS = function () {
+MockWSServer.prototype.makeClosingWSS = function() {
     // respond to the test message by closing the socket
     var closeWS = function (message) {
         message = JSON.parse(message);
