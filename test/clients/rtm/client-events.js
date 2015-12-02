@@ -373,7 +373,7 @@ describe('RTM API Event Handlers', function () {
             };
 
             it('adds a user to a channel and updates message history when a `channel_join` message is received', function() {
-                testBaseChannelJoin('message::channel_join', 'C0CJ25PDM', 'U0F3LFX6K');
+                testBaseChannelJoin('message::channel_join', TEST_CHANNEL_ID, 'U0F3LFX6K');
             });
 
             it('adds a user to a group and updates message history when a `group_join` message is received', function() {
@@ -381,7 +381,7 @@ describe('RTM API Event Handlers', function () {
             });
 
             it('removes a user from a channel and updates message history when a `channel_leave` message is received', function() {
-                testBaseChannelLeave('message::channel_leave', 'C0CJ25PDM', 'U0F3LFX6K');
+                testBaseChannelLeave('message::channel_leave', TEST_CHANNEL_ID, 'U0F3LFX6K');
             });
 
             it('removes a user from a group and updates message history when a `group_leave` message is received', function() {
@@ -389,7 +389,7 @@ describe('RTM API Event Handlers', function () {
             });
 
             it('adds an item to message history when a `channel_archive` message is received', function() {
-                testMessageAdd('message::channel_archive', 'C0CJ25PDM', 'channel_archive');
+                testMessageAdd('message::channel_archive', TEST_CHANNEL_ID, 'channel_archive');
             });
 
             it('adds an item to message history when a `group_archive` message is received', function() {
@@ -410,7 +410,7 @@ describe('RTM API Event Handlers', function () {
                     "ts": "1448496776.000003",
                     "team": "T0CHZBU59"
                 };
-                var channel = dataStore.getChannelById('C0CJ25PDM');
+                var channel = dataStore.getChannelById(TEST_CHANNEL_ID);
                 channel.addMessage(initialMsg);
 
                 clientEventHandlers['message::message_deleted'](dataStore, getRTMMessageFixture('message::message_deleted'));
@@ -428,10 +428,11 @@ describe('RTM API Event Handlers', function () {
                     "ts": "1448496754.000002",
                     "team": "T0CHZBU59"
                 };
-                var channel = dataStore.getChannelById('C0CJ25PDM');
+                var channel = dataStore.getChannelById(TEST_CHANNEL_ID);
                 channel.addMessage(initialMsg);
 
                 clientEventHandlers['message::message_changed'](dataStore, getRTMMessageFixture('message::message_changed'));
+                expect(channel.history).to.have.length(3);
                 expect(channel.history[1]).to.have.property('text', 'Hi carol! :simple_smile:');
             });
 

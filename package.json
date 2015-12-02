@@ -28,6 +28,7 @@
     "lodash.create": "^3.1.1",
     "lodash.find": "^3.2.1",
     "lodash.findindex": "^3.2.1",
+    "lodash.findlastindex": "^3.2.1",
     "lodash.foreach": "^3.0.3",
     "lodash.foreachright": "^3.0.2",
     "lodash.isempty": "^3.0.4",
