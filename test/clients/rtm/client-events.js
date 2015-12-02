@@ -432,7 +432,7 @@ describe('RTM API Event Handlers', function () {
                 channel.addMessage(initialMsg);
 
                 clientEventHandlers['message::message_changed'](dataStore, getRTMMessageFixture('message::message_changed'));
-                expect(channel.history[1]).to.have.property('text', 'Howdy Carol');
+                expect(channel.history[1]).to.have.property('text', 'Hi carol! :simple_smile:');
             });
 
             //    case MESSAGE_SUBTYPES.CHANNEL_TOPIC:
