@@ -6,7 +6,6 @@ var MemoryDataStore = require('../../lib/data-store').MemoryDataStore;
 var RtmAPIClient = require('../../lib/clients/rtm/client');
 var WebAPIClient = require('../../lib/clients/web/client');
 var rtmStartFixture = require('../fixtures/rtm.start.json');
-var transport = require('../../lib/clients/web/transports/request');
 
 var fakeWs = function () {
     return new EventEmitter();
@@ -16,7 +15,7 @@ var fakeWs = function () {
 var getRtmClient = function () {
     var webClient;
     var rtmClient;
-    webClient = new WebAPIClient('fake-token', transport);
+    webClient = new WebAPIClient('fake-token');
     rtmClient = new RtmAPIClient(webClient, fakeWs);
     sinon.stub(webClient.rtm, 'start', function (opts, cb) {
         cb(null, rtmStartFixture);

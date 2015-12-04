@@ -15,38 +15,18 @@ describe('Web API Client', function () {
     it('should accept supplied defaults when present', function () {
         var opts = {
             slackAPIUrl: 'test',
-            userAgent: 'test'
+            userAgent: 'test',
+            transport: lodash.noop
         };
-        var client = new WebAPIClient('test-token', lodash.noop, opts);
+        var client = new WebAPIClient('test-token', opts);
 
         expect(client.slackAPIUrl).to.equal('test');
         expect(client.userAgent).to.equal('test');
     });
 
-    it('should not throw an error when registering an unregistered facet', function () {
-        var opts = {facets: [facets.ApiFacet]};
-        var client = new WebAPIClient('test-token', lodash.noop, opts);
-        var authFacet = new facets.AuthFacet(lodash.noop);
-        var fn = function () {
-            client.registerFacet(authFacet);
-        };
-        expect(fn).to.not.throw(Error);
-    });
-
-    it('should throw an error when re-registering an registered facet', function () {
-        var opts = {facets: [facets.AuthFacet]};
-        var client = new WebAPIClient('test-token', lodash.noop, opts);
-        var authFacet = new facets.AuthFacet(lodash.noop);
-        var fn = function () {
-            client.registerFacet(authFacet);
-        };
-        expect(fn).to.throw(Error);
-    });
-
-    it('should create facets and prune the opts.facet object', function () {
-        var opts = {facets: [facets.AuthFacet]};
-        var client = new WebAPIClient('test-token', lodash.noop, opts);
-        expect(client).to.have.property('auth');
+    it('should register facets  during construction', function () {
+        var client = new WebAPIClient('test-token', {transport: lodash.noop});
+        expect(client.auth).to.not.be.undefined;
     });
 
     it('should make API calls via the transport function', function (done) {
@@ -56,7 +36,7 @@ describe('Web API Client', function () {
             body: '{"test": 10}'
         };
 
-        var client = new WebAPIClient('test-token', mockTransport);
+        var client = new WebAPIClient('test-token', {transport: mockTransport});
 
         client.makeAPICall('test', args, function(err, res) {
             expect(res).to.deep.equal({'test': 10});

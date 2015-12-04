@@ -6,8 +6,6 @@ var RtmAPIClient = require('../../../lib/clients/rtm/client');
 var MockWSServer = require('../../utils/mock-ws-server');
 var WebAPIClient = require('../../../lib/clients/web/client');
 var clientEvents = require('../../../lib/clients/rtm/events/client-events');
-var transport = require('../../../lib/clients/web/transports/request');
-var wsSocket = require('../../../lib/clients/rtm/sockets/ws');
 
 
 describe('RTM API Client', function () {
@@ -15,7 +13,7 @@ describe('RTM API Client', function () {
     var wss;
     var webClient;
     before(function () {
-        webClient = new WebAPIClient('fake-token', transport);
+        webClient = new WebAPIClient('fake-token');
         wss = new MockWSServer({port: 5221});
     });
 
@@ -33,7 +31,7 @@ describe('RTM API Client', function () {
             maxPongInterval: 2,
             reconnectionBackoff: 1
         };
-        var rtm = new RtmAPIClient(webClient, wsSocket, opts);
+        var rtm = new RtmAPIClient(webClient, opts);
         sinon.spy(rtm, 'reconnect');
         rtm.start();
 
@@ -54,7 +52,7 @@ describe('RTM API Client', function () {
         var opts = {
             reconnectionBackoff: 1
         };
-        var rtm = new RtmAPIClient(webClient, wsSocket, opts);
+        var rtm = new RtmAPIClient(webClient, opts);
         sinon.spy(rtm, 'reconnect');
         rtm.start();
 
