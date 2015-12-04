@@ -19,6 +19,18 @@ npm install slack-client --save
 ## Usage
 ```js
 
+var WebClient = require('../lib/clients/web/client');
+var RtmClient = require('../lib/clients/rtm/client');
+
+var token = '' || process.env.SLACK_API_TOKEN;
+
+var webClient = new WebClient(token);
+var rtm = new RtmClient(webClient, {logLevel: 'debug'});
+rtm.start();
+
+rtm.on('message', function(message) {
+    console.log(message);
+});
 
 ```
 
@@ -41,23 +53,3 @@ Here's the most direct way to get your work merged into the project.
 ## Copyright
 
 Copyright &copy; Slack Technologies, Inc. MIT License; see LICENSE for further details.
-
-
-Slack = require 'slack-client'
-
-slackToken = 'xoxb-YOUR-TOKEN-HERE' # Add a bot at https://my.slack.com/services/new/bot and copy the token here.
-autoReconnect = true # Automatically reconnect after an error response from Slack.
-autoMark = true # Automatically mark each message as read after it is processed.
-
-slack = new Slack(slackToken, autoReconnect, autoMark)
-
-slack.on 'open', ->
-    console.log "Connected to #{slack.team.name} as @#{slack.self.name}"
-
-slack.on 'message', (message) ->
-    console.log message
-
-slack.on 'error', (err) ->
-    console.error "Error", err
-
-slack.login()

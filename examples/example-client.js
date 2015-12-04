@@ -1,11 +1,16 @@
-var WebClient = require('../lib/web/client');
-var RtmClient = require('../lib/rtm/client');
+/**
+ * Example for creating and working with the Slack RTM API.
+ */
 
-var transport = require('../web/transports/request');
+var WebClient = require('../lib/clients/web/client');
+var RtmClient = require('../lib/clients/rtm/client');
+
 var token = '' || process.env.SLACK_API_TOKEN;
 
-var webClient = new WebClient(token, transport);
-
-var wsMaker = require('../rtm/sockets/ws');
-var rtm = new RtmClient(webClient, wsMaker, {logLevel: 'debug'});
+var webClient = new WebClient(token);
+var rtm = new RtmClient(webClient, {logLevel: 'debug'});
 rtm.start();
+
+rtm.on('message', function(message) {
+    console.log(message);
+});

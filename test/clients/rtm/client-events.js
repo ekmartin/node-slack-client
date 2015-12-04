@@ -20,21 +20,22 @@ var TEST_CHANNEL_ID = 'C0CJ25PDM';
 var TEST_GROUP_ID = 'G0CHZSXFW';
 
 
-describe('RTM API Event Handlers', function () {
+describe('RTM API Event Handlers', function() {
 
-    describe('Raw Events', function () {
-        it('should emit raw messages with all lower case keys unchanged', function (done) {
+    describe('Raw Events', function() {
+        it('should emit raw messages with all lower case keys unchanged', function(done) {
             var rtmClient = getRtmClient();
-            rtmClient.on('raw::im_open', function (rawMsg) {
-                expect(rawMsg).to.deep.equal(getRTMMessageFixture('im_open', true));
+            rtmClient.on('raw_message', function(rawMsg) {
+                expect(rawMsg).to.equal(JSON.stringify(getRTMMessageFixture('im_open', true)));
                 done();
             });
             rtmClient.handleWsMessage(JSON.stringify(getRTMMessageFixture('im_open', true)));
         });
 
-        it('should emit raw messages with snake case keys changed to camelcase', function(done) {
+        it('should emit messages with snake case keys changed to camelcase and lower case keys unchanged', function(done) {
             var rtmClient = getRtmClient();
-            rtmClient.on('raw::manual_presence_change', function(rawMsg) {
+            rtmClient.on('manual_presence_change', function(rawMsg) {
+                expect(rawMsg).to.have.deep.property('presence');
                 expect(rawMsg).to.have.deep.property('eventTs');
                 done();
             });
@@ -42,11 +43,11 @@ describe('RTM API Event Handlers', function () {
         });
     });
 
-    describe('Parsed Events', function () {
+    describe('Parsed Events', function() {
 
-        describe('`bot_xxx` events', function () {
+        describe('`bot_xxx` events', function() {
 
-            var testBotUpserted = function (event) {
+            var testBotUpserted = function(event) {
                 var dataStore = getMemoryDataStore();
                 var botMsg = getRTMMessageFixture('bot_added');
                 clientEventHandlers[event](dataStore, botMsg);
@@ -54,11 +55,11 @@ describe('RTM API Event Handlers', function () {
                 expect(dataStore.getBotById(botMsg.bot.id)).to.have.property('name', botMsg.bot.name);
             };
 
-            it('adds a new bot to the data store when a `bot_added` message is received', function () {
+            it('adds a new bot to the data store when a `bot_added` message is received', function() {
                 testBotUpserted('bot_added');
             });
 
-            it('updates an existing bot in the data store when a `bot_changed` message is received', function () {
+            it('updates an existing bot in the data store when a `bot_changed` message is received', function() {
                 testBotUpserted('bot_changed');
             });
 
@@ -117,7 +118,7 @@ describe('RTM API Event Handlers', function () {
                 return baseChannel;
             };
 
-            describe('`channel_xxx` events', function () {
+            describe('`channel_xxx` events', function() {
 
                 it('sets isArchived to true on a channel when a `channel_archive` message is received', function() {
                     isArchivedChange('channel_archive', TEST_CHANNEL_ID, true);
@@ -161,7 +162,7 @@ describe('RTM API Event Handlers', function () {
 
             });
 
-            describe('`group_xxx` events', function () {
+            describe('`group_xxx` events', function() {
 
                 it('sets isArchived to true on a group when a `group_archive` message is received', function() {
                     isArchivedChange('group_archive', TEST_GROUP_ID, true);
@@ -196,9 +197,9 @@ describe('RTM API Event Handlers', function () {
 
             });
 
-            describe('`im_xxx` events', function () {
+            describe('`im_xxx` events', function() {
 
-                var testDMOpenStatus = function (isOpen, event) {
+                var testDMOpenStatus = function(isOpen, event) {
                     var dataStore = getMemoryDataStore();
                     dataStore.getDMById(rtmStartFixture.ims[0].id).isOpen = isOpen;
                     clientEventHandlers[event](dataStore, getRTMMessageFixture(event));
@@ -226,7 +227,7 @@ describe('RTM API Event Handlers', function () {
 
         });
 
-        describe('`presence_xxx` events', function () {
+        describe('`presence_xxx` events', function() {
 
             it('should set the user presence to match the message presence when a `manual_presence_change` message is received', function(){
                 var dataStore = getMemoryDataStore();
@@ -246,7 +247,7 @@ describe('RTM API Event Handlers', function () {
 
         });
 
-        describe('star_xxx`` events', function () {
+        describe('star_xxx`` events', function() {
             describe('star_added', function() {
 
                 it('stars a message when a `star_added` message with a `message` property is received');
@@ -271,7 +272,7 @@ describe('RTM API Event Handlers', function () {
         });
 
 
-        describe('`team_xxx` events', function () {
+        describe('`team_xxx` events', function() {
 
             it('updates the team domain when a `team_domain_change` message is received', function() {
                 var dataStore = getMemoryDataStore();
@@ -313,9 +314,9 @@ describe('RTM API Event Handlers', function () {
         });
 
 
-        describe('user events', function () {
+        describe('user events', function() {
 
-            it('updates a user preference when `pref_change` is received', function () {
+            it('updates a user preference when `pref_change` is received', function() {
                 var dataStore = getMemoryDataStore();
                 var prefChangeMsg = getRTMMessageFixture('pref_change');
                 clientEventHandlers['pref_change'](ALICE_USER_ID, '', dataStore, prefChangeMsg);
@@ -324,7 +325,7 @@ describe('RTM API Event Handlers', function () {
                 expect(user.prefs[humps.camelize(prefChangeMsg.name)]).to.equal(prefChangeMsg.value);
             });
 
-            it('updates a channel, marking a user as typing when `user_typing` is received', function () {
+            it('updates a channel, marking a user as typing when `user_typing` is received', function() {
                 var dataStore = getMemoryDataStore();
                 var channel = dataStore.getChannelById('C0CHZA86Q');
                 var userTypingMsg = getRTMMessageFixture('user_typing');
