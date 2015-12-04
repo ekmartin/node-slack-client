@@ -2,9 +2,8 @@ var expect = require('chai').expect;
 var lodash = require('lodash');
 
 var WebAPIClient = require('../../../lib/clients/web/client');
-var deserialize = require('../../../lib/middleware/json');
 var facets = require('../../../lib/clients/web/facets');
-var isOk = require('../../../lib/middleware/is-ok');
+
 
 var mockTransport = function (args, cb) {
     cb(args.form.err, args.form.headers, args.form.statusCode, args.form.body);
@@ -16,13 +15,11 @@ describe('Web API Client', function () {
     it('should accept supplied defaults when present', function () {
         var opts = {
             slackAPIUrl: 'test',
-            middleware: [],
             userAgent: 'test'
         };
         var client = new WebAPIClient('test-token', lodash.noop, opts);
 
         expect(client.slackAPIUrl).to.equal('test');
-        expect(client.middleware).to.deep.equal([]);
         expect(client.userAgent).to.equal('test');
     });
 
@@ -56,13 +53,13 @@ describe('Web API Client', function () {
         var args = {
             headers: {},
             statusCode: 200,
-            body: 'test'
+            body: '{"test": 10}'
         };
 
-        var client = new WebAPIClient('test-token', mockTransport, {middleware: []});
+        var client = new WebAPIClient('test-token', mockTransport);
 
-        client.makeAPICall('test', args, function (err, res) {
-            expect(res).to.equal('test');
+        client.makeAPICall('test', args, function(err, res) {
+            expect(res).to.deep.equal({'test': 10});
             done();
         });
     });
