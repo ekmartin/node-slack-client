@@ -53,3 +53,13 @@ Here's the most direct way to get your work merged into the project.
 ## Copyright
 
 Copyright &copy; Slack Technologies, Inc. MIT License; see LICENSE for further details.
+
+
+## v2.0.0 TODO
+- add a retry policy to the web API
+- handle and respect 429 responses in the web API
+- update the remaining models to correctly pull out all properties
+- figure out how data-store updates should handle updating objects where a richer object is already present, e.g. the self user is cached on RTM start and then a simplified version of the user object is received and overwrites it
+- figure out how to make data-store methods async friendly, e.g. so that a redis data-store could be a thing
+- improve the events emitted by the RTM api, e.g. errors etc.
+- improve test coverage of the RTM Client API

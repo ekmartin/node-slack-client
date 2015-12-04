@@ -72,4 +72,6 @@ describe('RTM API Client', function () {
 
     it('should not attempt to reconnect while a reconnection is in progress');
 
+    it('should reconnect when a `team_migration_started` event is received');
+
 });
