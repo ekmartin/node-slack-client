@@ -19,7 +19,6 @@
     "url": "http://github.com/slackhq/node-slack-client/issues"
   },
   "dependencies": {
-    "coffee-script": "~1.9.3",
     "eventemitter3": "^1.1.1",
     "humps": "^1.0.0",
     "inherits": "^2.0.1",
