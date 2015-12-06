@@ -19,8 +19,8 @@ npm install slack-client --save
 ## Usage
 ```js
 
-var WebClient = require('../lib/clients/web/client');
-var RtmClient = require('../lib/clients/rtm/client');
+var WebClient = require('slack-client').WebClient;
+var RtmClient = require('slack-client').RtmClient;
 
 var token = '' || process.env.SLACK_API_TOKEN;
 
