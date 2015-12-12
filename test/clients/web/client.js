@@ -47,22 +47,53 @@ describe('Web API Client', function() {
         });
     });
 
-    it('should pause job execution in response to a 429 header', function(done) {
-        nock('https://slack.com/api')
-            .post('/test')
-            .reply(429, '{}', {'X-Retry-After': 0});
+    describe('it should retry failed or rate-limited requests', function() {
 
-        nock('https://slack.com/api')
-            .post('/test')
-            .reply(200, '{}');
+        var attemptAPICall = function(done) {
+            nock('https://slack.com/api')
+                .post('/test')
+                .reply(200, '{}');
 
-        var client = new WebAPIClient('test-token');
-        sinon.spy(client, 'transport');
+            var client = new WebAPIClient('test-token', {
+                retryConfig: {
+                    minTimeout: 0,
+                    maxTimeout: 1
+                }
+            });
+            sinon.spy(client, 'transport');
 
-        client.makeAPICall('test', {}, function() {
-            expect(client.transport.callCount).to.equal(2);
-            done();
+            client.makeAPICall('test', {}, function() {
+                expect(client.transport.callCount).to.equal(2);
+                done();
+            });
+        };
+
+        it('should pause job execution in response to a 429 header', function(done) {
+            nock('https://slack.com/api')
+                .post('/test')
+                .reply(429, '{}', {'X-Retry-After': 0});
+
+            attemptAPICall(done);
         });
+
+        it('should retry failed requests', function(done) {
+            nock('https://slack.com/api')
+                .post('/test')
+                .replyWithError('this should never happen');
+
+            attemptAPICall(done);
+        });
+
+        it('should retry non 200 or 429 responses', function(done) {
+            nock('https://slack.com/api')
+                .post('/test')
+                .reply(500, '');
+
+            attemptAPICall(done);
+        });
+
     });
+
+
 
 });
