@@ -4,7 +4,7 @@
  * @constructor
  */
 
-var bind = require('lodash.bind');
+var bind = require('lodash').bind;
 var inherits = require('inherits');
 var ws = require('ws');
 

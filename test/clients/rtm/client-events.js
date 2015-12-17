@@ -1,5 +1,4 @@
 var expect = require('chai').expect;
-var forEach = require('lodash.foreach');
 var humps = require('humps');
 var lodash = require('lodash');
 
@@ -16,6 +15,7 @@ var rtmStartFixture = require('../../fixtures/rtm.start');
 
 
 var ALICE_USER_ID = 'U0CJ5PC7L';
+var GENERAL_CHANNEL_ID = 'C0CHZA86Q';
 var TEST_CHANNEL_ID = 'C0CJ25PDM';
 var TEST_GROUP_ID = 'G0CHZSXFW';
 
@@ -327,7 +327,7 @@ describe('RTM API Event Handlers', function() {
 
             it('updates a channel, marking a user as typing when `user_typing` is received', function() {
                 var dataStore = getMemoryDataStore();
-                var channel = dataStore.getChannelById('C0CHZA86Q');
+                var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
                 var userTypingMsg = getRTMMessageFixture('user_typing');
                 clientEventHandlers['user_typing'](dataStore, userTypingMsg);
 
