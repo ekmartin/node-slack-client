@@ -345,6 +345,28 @@
     "user": "U0CJ5PC7L",
     "presence": "away"
   },
+  "reaction_added": {
+    "type": "reaction_added",
+    "user": "U0CJ5PC7L",
+    "item": {
+      "type": "message",
+      "channel": "C0CHZA86Q",
+      "ts": "1444959632.000002"
+    },
+    "reaction": "+1",
+    "event_ts": "1450340664.394875"
+  },
+  "reaction_removed": {
+    "type": "reaction_removed",
+    "user": "U0CJ5PC7L",
+    "item": {
+      "type": "message",
+      "channel": "C0CHZA86Q",
+      "ts": "1444959632.000002"
+    },
+    "reaction": "+1",
+    "event_ts": "1450340723.395241"
+  },
   "team_domain_change": {
     "type": "team_domain_change",
     "url": "https://sslack-api-test.slack.com",

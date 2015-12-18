@@ -247,7 +247,33 @@ describe('RTM API Event Handlers', function() {
 
         });
 
-        describe('star_xxx`` events', function() {
+        describe('reaction_xxx` events', function() {
+
+            it('should add a reaction to a message when a `reaction_added` event is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                clientEventHandlers['reaction_added'](dataStore, getRTMMessageFixture('reaction_added'));
+                var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
+                var message = channel.getMessageByTs('1444959632.000002');
+                expect(message.reactions).to.have.length(1);
+                expect(message.reactions[0]).to.have.property('name', '+1');
+            });
+
+            it('should remove a reaction from a message when a `reaction_removed` event is received', function() {
+                var dataStore = getMemoryDataStore();
+
+                var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
+                var message = channel.getMessageByTs('1444959632.000002');
+
+                clientEventHandlers['reaction_added'](dataStore, getRTMMessageFixture('reaction_added'));
+                expect(message.reactions[0]).to.have.property('name', '+1');
+                clientEventHandlers['reaction_removed'](dataStore, getRTMMessageFixture('reaction_removed'));
+                expect(message.reactions).to.have.length(0);
+            });
+
+        });
+
+        describe('`star_xxx` events', function() {
             describe('star_added', function() {
 
                 it('stars a message when a `star_added` message with a `message` property is received');
