@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var humps = require('humps');
 var lodash = require('lodash');
+var cloneDeep = lodash.cloneDeep;
 
 var RTM_EVENTS = require('../../../lib/clients/rtm/events/rtm-events').EVENTS;
 var MemoryDataStore = require('../../../lib/data-store').MemoryDataStore;
@@ -457,6 +458,88 @@ describe('RTM API Event Handlers', function() {
 
         });
 
+        describe('file events', function() {
+            var fileFixture = cloneDeep(getRTMMessageFixture('file_created').file);
+
+            function testFileCreatedEvent(fileEvent) {
+                var dataStore = getMemoryDataStore();
+                clientEventHandlers[fileEvent](dataStore, getRTMMessageFixture(fileEvent));
+                expect(dataStore.getFileById(fileFixture.id).title).to.equal(fileFixture.title);
+            }
+
+            it('deletes a file when a `file_deleted` event is received', function() {
+                var dataStore = getMemoryDataStore();
+                var file = dataStore.setFile(fileFixture);
+
+                clientEventHandlers['file_deleted'](dataStore, getRTMMessageFixture('file_deleted'));
+                expect(dataStore.getFileById(fileFixture.id)).to.not.exist;
+            });
+
+            it('creates a new file when a `file_created` event is received', function() {
+                testFileCreatedEvent('file_created');
+            });
+
+            it('creates a new file when a `file_shared` event is received', function() {
+                testFileCreatedEvent('file_shared');
+            });
+
+            it('creates a new file when a `file_unshared` event is received', function() {
+                testFileCreatedEvent('file_unshared');
+            });
+
+            it('creates a new file when a `file_change` event is received', function() {
+                testFileCreatedEvent('file_change');
+            });
+
+            it('updates an existing file when a `file_change` event is received', function() {
+                var dataStore = getMemoryDataStore();
+                var file = dataStore.setFile(fileFixture);
+
+                clientEventHandlers['file_change'](dataStore, getRTMMessageFixture('file_change'));
+                expect(dataStore.getFileById(fileFixture.id).name).to.equal('changed.htm');
+            });
+
+            it('sets an existing file to shared when a `file_shared` event is received', function() {
+                var dataStore = getMemoryDataStore();
+                var file = dataStore.setFile(fileFixture);
+                clientEventHandlers['file_shared'](dataStore, getRTMMessageFixture('file_shared'));
+                expect(dataStore.getFileById(fileFixture.id).isShared).to.be.true;
+            });
+
+            it('sets an existing file to not shared when a `file_unshared` event is received', function() {
+                var dataStore = getMemoryDataStore();
+                var file = dataStore.setFile(fileFixture);
+                clientEventHandlers['file_unshared'](dataStore, getRTMMessageFixture('file_unshared'));
+                expect(dataStore.getFileById(fileFixture.id).isShared).to.be.false;
+            });
+
+            it('does not create a new file when a `file_private` event is received', function() {
+                var dataStore = getMemoryDataStore();
+                clientEventHandlers['file_private'](dataStore, getRTMMessageFixture('file_private'));
+                expect(dataStore.getFileById(fileFixture.id)).to.not.exist;
+            });
+
+            it('sets an existing file to private when a `file_private` event is received', function() {
+                var dataStore = getMemoryDataStore();
+                fileFixture.isPublic = true;
+                var file = dataStore.setFile(fileFixture);
+                clientEventHandlers['file_private'](dataStore, getRTMMessageFixture('file_private'));
+                expect(dataStore.getFileById(fileFixture.id).isPublic).to.be.false;
+            });
+
+            it('deletes an existing file when a `file_deleted` event is received', function() {
+                var dataStore = getMemoryDataStore();
+                var file = dataStore.setFile(fileFixture);
+                clientEventHandlers['file_deleted'](dataStore, getRTMMessageFixture('file_deleted'));
+                expect(dataStore.getFileById(fileFixture.id)).to.not.exist;
+            });
+
+            it('does nothing when receiving a `file_deleted` event for a file it does not have', function() {
+                var dataStore = getMemoryDataStore();
+                clientEventHandlers['file_deleted'](dataStore, getRTMMessageFixture('file_deleted'));
+                expect(dataStore.getFileById(fileFixture.id)).to.not.exist;
+            });
+        });
     });
 
 });
