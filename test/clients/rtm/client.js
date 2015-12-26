@@ -70,7 +70,24 @@ describe('RTM API Client', function () {
         });
     });
 
-    it('should not attempt to reconnect while a reconnection is in progress');
+    it('should not attempt to reconnect while a connect is in progress', function (done) {
+        wss.makeClosingWSS();
+        var opts = {
+            reconnectionBackoff: 1
+        };
+        var rtm = new RtmAPIClient(webClient, opts);
+        sinon.spy(rtm, 'reconnect');
+
+        rtm.on(clientEvents.CONNECTING, function () {
+            var attemptStub = sinon.stub();
+            rtm.on(clientEvents.ATTEMPTING_RECONNECT, attemptStub);
+            rtm.reconnect();
+            expect(attemptStub.called).to.be.false;
+            done();
+        });
+
+        rtm.start();
+    });
 
     it('should reconnect when a `team_migration_started` event is received');
 
