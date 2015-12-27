@@ -19,6 +19,7 @@ var ALICE_USER_ID = 'U0CJ5PC7L';
 var GENERAL_CHANNEL_ID = 'C0CHZA86Q';
 var TEST_CHANNEL_ID = 'C0CJ25PDM';
 var TEST_GROUP_ID = 'G0CHZSXFW';
+var TEST_DM_ID = 'D0CHZQWNP';
 
 
 describe('RTM API Event Handlers', function() {
@@ -216,12 +217,12 @@ describe('RTM API Event Handlers', function() {
                     var dataStore = getMemoryDataStore();
 
                     clientEventHandlers['im_created'](dataStore, getRTMMessageFixture('im_created'));
-                    var dmChannel = dataStore.getDMById('D0CHZQWNP');
+                    var dmChannel = dataStore.getDMById(TEST_DM_ID);
                     expect(dmChannel).to.not.be.undefined;
                 });
 
                 it('marks the DM channel as read when an `im_marked` message is received', function() {
-                    testBaseChannelMarked('im_marked', 'D0CHZQWNP');
+                    testBaseChannelMarked('im_marked', TEST_DM_ID);
                 });
 
             });
@@ -276,6 +277,15 @@ describe('RTM API Event Handlers', function() {
 
         describe('`star_xxx` events', function() {
             describe('star_added', function() {
+                function testStarGroupChannelDM(id) {
+                    var dataStore = getMemoryDataStore();
+                    var message = getRTMMessageFixture('star_added::channel');
+                    message.item.channel = id;
+                    var channel = dataStore.getChannelGroupOrDMById(id);
+                    channel.isStarred = false;
+                    clientEventHandlers['star_added::channel'](dataStore, message);
+                    expect(channel.isStarred).to.be.true;
+                }
 
                 it('stars an existing message when a `star_added` message with a `message` property is received', function() {
                     var dataStore = getMemoryDataStore();
@@ -298,29 +308,60 @@ describe('RTM API Event Handlers', function() {
 
                 it('stars a file when a `star_added` message with a `message` property is received');
                 it('stars a file_comment when a `star_added` message with a `file_comment` property is received');
-                it('stars a channel when a `star_added` message with a `channel` property is received');
-                it('stars a DM when a `star_added` message with a `im` property is received');
-                it('stars a group when a `star_added` message with a `group` property is received');
+
+                it('stars a channel when a `star_added` message with a `channel` property is received', function() {
+                    testStarGroupChannelDM(GENERAL_CHANNEL_ID);
+                });
+
+                it('does nothing when a `star_added` message with an unknown `channel` property is received', function() {
+                    var dataStore = getMemoryDataStore();
+                    var message = cloneDeep(getRTMMessageFixture('star_added::channel'));
+                    message.item.channel = 'UNKNOWN12';
+
+                    clientEventHandlers['star_added::channel'](dataStore, message);
+                    var channel = dataStore.getChannelById(message.item.channel);
+                    expect(channel).to.not.exist;
+                });
+
+                it('stars a DM when a `star_added` message with a `im` property is received', function() {
+                    testStarGroupChannelDM(TEST_DM_ID);
+                });
+
+                it('stars a group when a `star_added` message with a `group` property is received', function() {
+                    testStarGroupChannelDM(TEST_GROUP_ID);
+                });
 
             });
 
             describe('star_removed', function() {
+
+                function testUnstarGroupChannelDM(id) {
+                    var dataStore = getMemoryDataStore();
+                    var message = getRTMMessageFixture('star_removed::channel');
+                    message.item.channel = id;
+                    var channel = dataStore.getChannelGroupOrDMById(id);
+                    channel.isStarred = true;
+                    clientEventHandlers['star_removed::channel'](dataStore, message);
+                    expect(channel.isStarred).to.be.false;
+                }
 
                 it('unstars a message when a `star_removed` message with a `message` property is received', function () {
                     var dataStore = getMemoryDataStore();
                     var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
                     var message = channel.getMessageByTs('1444959632.000002');
                     message.isStarred = true;
+
                     clientEventHandlers['star_removed::message'](dataStore, getRTMMessageFixture('star_removed::message'));
                     expect(message.isStarred).to.be.false;
                 });
 
                 it('unstars and creates a new message when a `star_added` message with a `message` property is received', function() {
+                    var dataStore = getMemoryDataStore();
                     var newMessage = cloneDeep(getRTMMessageFixture('star_removed::message'));
                     var newTs = '1734959632.000003'
                     newMessage.item.message.ts = newTs;
-                    var dataStore = getMemoryDataStore();
                     var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
+
                     clientEventHandlers['star_removed::message'](dataStore, newMessage);
                     var message = channel.getMessageByTs(newTs);
                     expect(message.isStarred).to.be.false;
@@ -328,9 +369,18 @@ describe('RTM API Event Handlers', function() {
 
                 it('unstars a file when a `star_removed` message with a `message` property is received');
                 it('unstars a file_comment when a `star_removed` message with a `file_comment` property is received');
-                it('unstars a channel when a `star_removed` message with a `channel` property is received');
-                it('unstars a DM when a `star_removed` message with a `im` property is received');
-                it('unstars a group when a `star_removed` message with a `group` property is received');
+
+                it('unstars a channel when a `star_removed` message with a `channel` property is received', function() {
+                    testUnstarGroupChannelDM(GENERAL_CHANNEL_ID);
+                });
+
+                it('unstars a DM when a `star_removed` message with a `im` property is received', function() {
+                    testUnstarGroupChannelDM(TEST_DM_ID);
+                });
+
+                it('unstars a group when a `star_removed` message with a `group` property is received', function() {
+                    testUnstarGroupChannelDM(TEST_GROUP_ID);
+                });
 
             });
         });

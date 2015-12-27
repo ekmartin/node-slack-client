@@ -367,9 +367,19 @@
     "reaction": "+1",
     "event_ts": "1450340723.395241"
   },
+  "star_added::channel": {
+    "type": "star_added",
+    "user": "U0CJ5PC7L",
+    "event_ts": "1450340723.395241",
+    "item": {
+      "type": "channel",
+      "channel": "C0CHZA86Q"
+    }
+  },
   "star_added::message": {
     "type": "star_added",
     "user": "U0CJ5PC7L",
+    "event_ts": "1450340723.395241",
     "item": {
       "type": "message",
       "channel": "C0CHZA86Q",
@@ -381,9 +391,19 @@
       }
     }
   },
+  "star_removed::channel": {
+    "type": "star_removed",
+    "user": "U0CJ5PC7L",
+    "event_ts": "1450340723.395241",
+    "item": {
+      "type": "channel",
+      "channel": "C0CHZA86Q"
+    }
+  },
   "star_removed::message": {
     "type": "star_removed",
     "user": "U0CJ5PC7L",
+    "event_ts": "1450340723.395241",
     "item": {
       "type": "message",
       "channel": "C0CHZA86Q",
