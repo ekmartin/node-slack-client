@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var humps = require('humps');
 var lodash = require('lodash');
+var cloneDeep = lodash.cloneDeep;
 
 var RTM_EVENTS = require('../../../lib/clients/rtm/events/rtm-events').EVENTS;
 var MemoryDataStore = require('../../../lib/data-store').MemoryDataStore;
@@ -276,7 +277,25 @@ describe('RTM API Event Handlers', function() {
         describe('`star_xxx` events', function() {
             describe('star_added', function() {
 
-                it('stars a message when a `star_added` message with a `message` property is received');
+                it('stars an existing message when a `star_added` message with a `message` property is received', function() {
+                    var dataStore = getMemoryDataStore();
+                    var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
+                    clientEventHandlers['star_added::message'](dataStore, getRTMMessageFixture('star_added::message'));
+                    var message = channel.getMessageByTs('1444959632.000002');
+                    expect(message.isStarred).to.be.true;
+                });
+
+                it('stars and creates a new message when a `star_added` message with a `message` property is received', function() {
+                    var newMessage = cloneDeep(getRTMMessageFixture('star_added::message'));
+                    var newTs = '1734959632.000003'
+                    newMessage.item.message.ts = newTs;
+                    var dataStore = getMemoryDataStore();
+                    var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
+                    clientEventHandlers['star_added::message'](dataStore, newMessage);
+                    var message = channel.getMessageByTs(newTs);
+                    expect(message.isStarred).to.be.true;
+                });
+
                 it('stars a file when a `star_added` message with a `message` property is received');
                 it('stars a file_comment when a `star_added` message with a `file_comment` property is received');
                 it('stars a channel when a `star_added` message with a `channel` property is received');
@@ -287,7 +306,26 @@ describe('RTM API Event Handlers', function() {
 
             describe('star_removed', function() {
 
-                it('unstars a message when a `star_removed` message with a `message` property is received');
+                it('unstars a message when a `star_removed` message with a `message` property is received', function () {
+                    var dataStore = getMemoryDataStore();
+                    var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
+                    var message = channel.getMessageByTs('1444959632.000002');
+                    message.isStarred = true;
+                    clientEventHandlers['star_removed::message'](dataStore, getRTMMessageFixture('star_removed::message'));
+                    expect(message.isStarred).to.be.false;
+                });
+
+                it('unstars and creates a new message when a `star_added` message with a `message` property is received', function() {
+                    var newMessage = cloneDeep(getRTMMessageFixture('star_removed::message'));
+                    var newTs = '1734959632.000003'
+                    newMessage.item.message.ts = newTs;
+                    var dataStore = getMemoryDataStore();
+                    var channel = dataStore.getChannelById(GENERAL_CHANNEL_ID);
+                    clientEventHandlers['star_removed::message'](dataStore, newMessage);
+                    var message = channel.getMessageByTs(newTs);
+                    expect(message.isStarred).to.be.false;
+                });
+
                 it('unstars a file when a `star_removed` message with a `message` property is received');
                 it('unstars a file_comment when a `star_removed` message with a `file_comment` property is received');
                 it('unstars a channel when a `star_removed` message with a `channel` property is received');

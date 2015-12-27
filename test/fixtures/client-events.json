@@ -367,6 +367,34 @@
     "reaction": "+1",
     "event_ts": "1450340723.395241"
   },
+  "star_added::message": {
+    "type": "star_added",
+    "user": "U0CJ5PC7L",
+    "item": {
+      "type": "message",
+      "channel": "C0CHZA86Q",
+      "message": {
+        "user": "U0CJ5PC7L",
+        "text": "Cat!",
+        "ts": "1444959632.000002",
+        "is_starred": true
+      }
+    }
+  },
+  "star_removed::message": {
+    "type": "star_removed",
+    "user": "U0CJ5PC7L",
+    "item": {
+      "type": "message",
+      "channel": "C0CHZA86Q",
+      "message": {
+        "user": "U0CJ5PC7L",
+        "text": "Cat!",
+        "ts": "1444959632.000002",
+        "is_starred": false
+      }
+    }
+  },
   "team_domain_change": {
     "type": "team_domain_change",
     "url": "https://sslack-api-test.slack.com",
